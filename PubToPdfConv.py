@@ -1,20 +1,27 @@
 import os
 import comtypes.client
+import win32com.client
 
-publisher = comtypes.client.CreateObject("Publisher.Application")
+publisher = win32com.client.Dispatch("Publisher.Application")
+#publisher.Visible = True
+
 for root, dirs, files in os.walk(r"C:\Test"):
     for file in files:
-        if file.endswith(".pub"):
+        if file.lower().endswith(".pub"):
+            #gets file path for the input filepath then new file path for output pdf
             filePathInp = os.path.join(root, file)
-            filePathOut = os.path.join(root, f"{os.path.splitext(file)[0]}.pdf")
-            print(filePathInp)
-            print(filePathOut)
+            filePathOut = os.path.join(root, f"{os.path.splitext(file)[0]}.PDF")
 
             try:
-                publisher.Visible = True
-
                 doc = publisher.Open(filePathInp)
-                doc.ExportAsFixedFormat(Filename=filePathOut, Format=1)
+                #configers the export formats for saving as pdf
+                doc.ExportAsFixedFormat(
+                    Filename = filePathOut,
+                    Format = 2,
+                    Intent = 1,
+                    IncludeDocumentProperties = True,
+                    BitmapMissingFonts = True
+                )
                 doc.Close()
 
                 print(f"Conversion successful: {filePathOut}")

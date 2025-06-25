@@ -1,5 +1,6 @@
 import os
 import win32com.client
+import win32gui
 import gc
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
@@ -35,16 +36,18 @@ def browseFolders():
     #if the list isnt empty then activate the convert button
     if len(pubFiles) != 0:
         convertButtonPb.configure(state="normal")
-        convertButtonWd.configure(state="normal")
+        #convertButtonWd.configure(state="normal")
     #if its empty output error message box telling user, also keeps convert button inactive
     else:
         messagebox.showerror("No files found", "Folder doesnt contain any .pub (publisher) files" + folderSelected)
 
 
+#function to define perameters for pub to pdf
 def toPdf():
     PubToPdfAndPdfToDocx("pub", "pdf")
 
 
+#function to define perameters for pdf to docx
 def toDocx():
     PubToPdfAndPdfToDocx("pdf", "docx")
 
@@ -67,7 +70,7 @@ def UpdateCol(index, attempt):
 #converter, takes pubs and makes them pdfs or takes pdfs and makes them docx
 def PubToPdfAndPdfToDocx(convertFrom, convertTo):
     #once called on re-disables the button so it cant be re-clicked until valid directory and files
-    convertButtonWd.configure(state="disabled")
+    #convertButtonWd.configure(state="disabled")
     convertButtonPb.configure(state="disabled")
 
     #define the list and strings for the failed/error files
@@ -91,11 +94,11 @@ def PubToPdfAndPdfToDocx(convertFrom, convertTo):
                 #resets attempts for each file
                 attempt = 0
 
+                #depending if it is to pdf or to docx opens the correct win32com client
                 if convertFrom == "pub":
                     publisherWord = win32com.client.Dispatch("Publisher.Application")
                 elif convertFrom == "pdf":
                     publisherWord = win32com.client.Dispatch("Word.Application")
-
 
                 #gets file path for the input filepath then new file path for output pdf
                 filePathInp = os.path.normpath(os.path.join(root, file))
@@ -114,7 +117,8 @@ def PubToPdfAndPdfToDocx(convertFrom, convertTo):
                                 IncludeDocumentProperties = True,
                                 BitmapMissingFonts = True
                             )
-                        if convertTo == "docx":
+                        #otherwise export formated for saving as docx
+                        elif convertTo == "docx":
                             doc = publisherWord.Documents.Open(filePathInp)
                             doc.SaveAs2(
                                 filePathOut,
@@ -128,9 +132,7 @@ def PubToPdfAndPdfToDocx(convertFrom, convertTo):
                         #changes row colour and updates on gui with before mentioned function
                         if (attempt == 0):
                             tree.item((tree.get_children()[index]), tags=("success"))
-                        elif (attempt > 0):
-                            tree.item((tree.get_children()[index]), tags=("PartFailed"))
-                        UpdateCol(index, attempt)
+                            UpdateCol(index, attempt)
                         break
 
                     #if error converting
@@ -144,7 +146,11 @@ def PubToPdfAndPdfToDocx(convertFrom, convertTo):
                             tree.item((tree.get_children()[index]), tags=("failed"))
                             UpdateCol(index, attempt)
                             break
-                        #if not failed 3 times yet then retries until either works or failes and skips
+                        else:
+                            tree.item((tree.get_children()[index]), tags=("partFailed"))
+                            UpdateCol(index, attempt)
+                        #if not failed 3 times yet then retries until either works or fails and skips
+
 
     #if any fully failed (3 tries) then sets up output end message to include them
     if (ErrConvertedFiles):
@@ -180,18 +186,20 @@ try:
         tree.column(column, width=450 if column == "File" else 50, anchor='w')
     tree.pack()
 
-    label = tk.Label(frame, text="Step 2: Select files to convert too :")
+    label = tk.Label(frame, text="\nStep 2: Select files to convert to:")
     label.pack()
 
     convertButtonPb = tk.Button(frame, text="Convert to PDF\n.pub -> .pdf", command=toPdf, state="disabled")
     convertButtonPb.pack()
     #(for publisher to word make sure to convert to pdf first)
 
-    label = tk.Label(frame, text="For publisher to word make sure to convert to pdf first")
+#option can be unhashed if needed, warning the pdf to word format doesnt work well, everything copies over but will mess the page formats
+#also remove hash for line 73, 39 for it to work
+    '''label = tk.Label(frame, text="\nFor publisher to word make sure to convert to pdf first\nOptional step 3: Select files to convert to:")
     label.pack()
 
     convertButtonWd = tk.Button(frame, text="Convert to word\n.pdf -> .docx", command=toDocx, state="disabled")
-    convertButtonWd.pack()
+    convertButtonWd.pack()'''
 
     #colour tags for fails and sucesses
     tree.tag_configure("success", background="#ADEA33")

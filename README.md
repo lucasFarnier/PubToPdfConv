@@ -11,6 +11,7 @@ the user must select a folder/directory containing the .pubs to convert, they wi
 once selected a list of the publisher files found in that directory and sub directory will be displayed to confirm they are correct
 
 once done the user can select the convert button and a ✅ for successful conversions and an ❌ for insuccessful
+
 code meanings
 -
 there are 3 colours a file becomes if converted/not converted

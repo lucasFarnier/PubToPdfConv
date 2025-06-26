@@ -10,13 +10,16 @@ instructions
 the user must select a folder/directory containing the .pubs to convert, they will not be visable when picking the folder
 once selected a list of the publisher files found in that directory and sub directory will be displayed to confirm they are correct
 
-"Convert to PDF" button is also disabled until directory picked, and if a directory doesnt have any .pub it will output an error message and keep the "Convert to PDF" button disabled
+"Convert to PDF" button is also disabled until directory picked, and if a directory doesnt have any .pub it will output a popup error message and keep the "Convert to PDF" button disabled
 
 the program can be ended at any time by clicking the "cancle/end program" button, the window x button has be changed to minimise instead
 
 while running the "browse" and "Convert to PDF" are disabled during the conversion
 
 once done the user can select the convert button and a ✅ for successful conversions and an ❌ for insuccessful
+
+when a file failes to convert it will retry 2 more times (total tries 3 times), after if it failes 3 it skips the file
+also instead of a popup message saying "all files converted successfully" it will instead say "most files converted successfully [a list of file directories for the failed ones]"
 
 colour code meanings
 -
@@ -28,7 +31,6 @@ there are 3 colours a file becomes if converted/not converted
     
 -red, unsuccessful and the file could not convert
 
-when it is the last option instead of a message saying "all files converted successfully" it will instead say "most files converted successfully [a list of file directories for the failed ones]"
 
 photos
 -

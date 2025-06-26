@@ -12,7 +12,7 @@ once selected a list of the publisher files found in that directory and sub dire
 
 once done the user can select the convert button and a ✅ for successful conversions and an ❌ for insuccessful
 
-code meanings
+colour code meanings
 -
 there are 3 colours a file becomes if converted/not converted
     

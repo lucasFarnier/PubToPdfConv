@@ -13,12 +13,13 @@ once selected a list of the publisher files found in that directory and sub dire
 once done the user can select the convert button and a ✅ for successful conversions and an ❌ for insuccessful
     code meanings
     -
-    there are 3 colours a file becomes if converted/not converted:
-    -
-    green, successful first try
-    -
-    orange, failed 1 or 2 times but successful
-    -
-    red, unsuccessful and the file could not convert
+    there are 3 colours a file becomes if converted/not converted
+    
+    -green, successful first try
+    
+    -orange, failed 1 or 2 times but successful
+    
+    -red, unsuccessful and the file could not convert
+
     
     when it is the last option instead of a message saying "all files converted successfully" it will instead say "most files converted successfully [a list of file directories for the failed ones]"
